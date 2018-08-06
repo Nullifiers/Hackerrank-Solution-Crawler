@@ -3,27 +3,36 @@ import requests
 import getpass
 
 class Crawler():
+
+	login_url = 'https://www.hackerrank.com/auth/login'
+	submissions_url = 'https://www.hackerrank.com/rest/contests/master/submissions/?offset={}&limit={}'
+	challenge_url = 'https://www.hackerrank.com/rest/contests/master/challenges/{}/submissions/{}'
+
+	# add other exclusive extensions if your data not crawled properly
+	special_extensions = {
+		'cpp14': 'cpp',
+		'haskell': 'hs',
+		'java8': 'java',
+		'mysql': 'sql',
+		'oracle': 'sql',
+		'python': 'py',
+		'python3': 'py',
+		'text': 'txt',
+	}
+
 	def __init__(self):
 		self.session = requests.Session()
-		self.session.get('https://www.hackerrank.com').cookies.get_dict()		
 
 	def login(self, username, password):
-		login_url = 'https://www.hackerrank.com/auth/login'
-		resp = self.session.get(login_url, auth=(username, password))
+		resp = self.session.get(self.login_url, auth=(username, password))
 		self.cookies = self.session.cookies.get_dict()
 		self.headers = resp.request.headers
 
 	def get_all_submissions_url(self, offset, limit):
-		offset, limit = str(offset), str(limit)
-		base_url = 'https://www.hackerrank.com/rest/contests/master/submissions/'
-		url = base_url + '?offset=' + offset + '&limit=' + limit
-		return url
+		return self.submissions_url.format(offset, limit)
 
 	def get_submission_url(self, challenge_slug, submission_id):
-		submission_id = str(submission_id)
-		base_url = 'https://www.hackerrank.com/rest/contests/master/challenges/'
-		url = base_url + challenge_slug + '/submissions/' + submission_id
-		return url
+		return self.challenge_url.format(challenge_slug, submission_id)
 
 	def store_submission(self, file_name, code):
 		# write only if submission not recorded
@@ -32,21 +41,9 @@ class Crawler():
 			os.makedirs(os.path.dirname(file_name), exist_ok=True)
 			with open(file_name, 'w') as text_file:
 				print(code, file=text_file)
-
+				
 	def get_submissions(self, submissions):
 		headers = self.headers
-		
-		# add other exclusive extensions if your data not crawled properly
-		special_extensions = {
-			'cpp14': 'cpp',
-			'haskell': 'hs',
-			'java8': 'java',
-			'mysql': 'sql',
-			'oracle': 'sql',
-			'python': 'py',
-			'python3': 'py',
-			'text': 'txt',
-		}
 		
 		for submission in submissions:
 			id = submission['id']
@@ -62,21 +59,30 @@ class Crawler():
 			challenge_name = challenge['name']
 			challenge_slug = challenge['slug']
 			submission_url = self.get_submission_url(challenge_slug, id)
+
 			if status == 'Accepted' or status_code == 2:
 				resp = self.session.get(submission_url, headers=headers)
 				data = resp.json()['model']
 				code = data['code'].replace('\\n', '\n')
-				folder_name = 'Others/'
 				track = data['track']
+
+				folder_name = 'Others/'
 				file_extension = '.' + language
+				file_name = challenge_slug
+
 				if track:
-					track_folder_name = track['name'].strip().replace(' ', '-')
-					parent_folder_name = track['track_name'].strip().replace(' ', '-')
+					track_folder_name = track['name'].strip().replace(' ', '')
+					parent_folder_name = track['track_name'].strip().replace(' ', '')
 					folder_name = parent_folder_name + '/' + track_folder_name + '/'
-				if language in special_extensions:
-					file_extension = '.' + special_extensions[language]
-				file_name = folder_name + challenge_slug + file_extension
-				self.store_submission(file_name, code)
+				
+				if language in self.special_extensions:
+					file_extension = '.' + self.special_extensions[language]
+
+				if file_extension == '.java':
+					file_name = challenge_name.replace(' ','')
+				
+				file_path = 'Hackerrank/' + folder_name + file_name + file_extension
+				self.store_submission(file_path, code)
 				
 		print('All Solutions Crawled')
 
