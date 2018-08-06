@@ -7,6 +7,11 @@ class Crawler():
 	login_url = 'https://www.hackerrank.com/auth/login'
 	submissions_url = 'https://www.hackerrank.com/rest/contests/master/submissions/?offset={}&limit={}'
 	challenge_url = 'https://www.hackerrank.com/rest/contests/master/challenges/{}/submissions/{}'
+	domain_url = 'https://www.hackerrank.com/domains/{}/{}'
+	problem_url = 'https://www.hackerrank.com/challenges/{}/problem'
+
+	new_readme_text = '## [{}]({})\n\nProblem Name|Problem Link|Solution Link\n---|---|---'
+	problem_readme_text = '{}|[Problem]({})|[Solution](/{}{})'
 
 	# add other exclusive extensions if your data not crawled properly
 	special_extensions = {
@@ -35,12 +40,23 @@ class Crawler():
 		return self.challenge_url.format(challenge_slug, submission_id)
 
 	def store_submission(self, file_name, code):
-		# write only if submission not recorded
-		if not os.path.exists(file_name):
-			print(file_name)
+		print(file_name)
+		os.makedirs(os.path.dirname(file_name), exist_ok=True)
+		with open(file_name, 'w') as text_file:
+			print(code, file=text_file)
+
+	def update_readme(self, challenge_name, readme_file_name, challenge_slug, file_name, file_extension):
+		problem_url = self.problem_url.format(challenge_slug)
+		text = self.problem_readme_text.format(challenge_name, problem_url, file_name, file_extension)
+		with open(readme_file_name, 'a') as text_file:
+			print(text, file=text_file)
+
+	def create_readme(self, track_name, track_url, file_name):
+		if track_name is not None:
 			os.makedirs(os.path.dirname(file_name), exist_ok=True)
+			text = self.new_readme_text.format(track_name, track_url)
 			with open(file_name, 'w') as text_file:
-				print(code, file=text_file)
+				print(text, file=text_file)
 				
 	def get_submissions(self, submissions):
 		headers = self.headers
@@ -69,6 +85,8 @@ class Crawler():
 				folder_name = 'Others/'
 				file_extension = '.' + language
 				file_name = challenge_slug
+				# FIXME: fix it for folder with no track name
+				track_folder_name = None
 
 				if track:
 					track_folder_name = track['name'].strip().replace(' ', '')
@@ -82,8 +100,20 @@ class Crawler():
 					file_name = challenge_name.replace(' ','')
 				
 				file_path = 'Hackerrank/' + folder_name + file_name + file_extension
-				self.store_submission(file_path, code)
-				
+				if not os.path.exists(file_name):
+					self.store_submission(file_path, code)
+					readme_file_name = 'Hackerrank/' + folder_name + 'readme.md'
+					if not os.path.exists(readme_file_name) and track_folder_name:
+						track_url = self.domain_url.format(track['track_slug'], track['slug'])
+						self.create_readme(track_folder_name, track_url, readme_file_name)
+					if track_folder_name:
+						self.update_readme(
+							challenge_name,
+							readme_file_name,
+							challenge_slug,
+							file_name,
+							file_extension,
+						)
 		print('All Solutions Crawled')
 
 if __name__ == "__main__":
