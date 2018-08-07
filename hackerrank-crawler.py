@@ -10,8 +10,8 @@ class Crawler():
 	domain_url = 'https://www.hackerrank.com/domains/{}/{}'
 	problem_url = 'https://www.hackerrank.com/challenges/{}/problem'
 
-	new_readme_text = '## [{}]({})\n\nProblem Name|Problem Link|Solution Link\n---|---|---'
-	problem_readme_text = '{}|[Problem]({})|[Solution](/{}{})'
+	new_readme_text = '## [{}]({})\n\nProblem Name | Problem Link | Solution Link\n---|---|---'
+	problem_readme_text = '{} | [Problem]({}) | [Solution](/{}{})'
 
 	# add other exclusive extensions if your data not crawled properly
 	special_extensions = {
@@ -102,7 +102,7 @@ class Crawler():
 				file_path = 'Hackerrank/' + folder_name + file_name + file_extension
 				if not os.path.exists(file_name):
 					self.store_submission(file_path, code)
-					readme_file_name = 'Hackerrank/' + folder_name + 'readme.md'
+					readme_file_name = 'Hackerrank/' + folder_name + 'README.md'
 					if not os.path.exists(readme_file_name) and track_folder_name:
 						track_url = self.domain_url.format(track['track_slug'], track['slug'])
 						self.create_readme(track_folder_name, track_url, readme_file_name)
