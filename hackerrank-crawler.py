@@ -3,15 +3,18 @@ import requests
 import getpass
 
 class Crawler():
-
-	login_url = 'https://www.hackerrank.com/auth/login'
-	submissions_url = 'https://www.hackerrank.com/rest/contests/master/submissions/?offset={}&limit={}'
-	challenge_url = 'https://www.hackerrank.com/rest/contests/master/challenges/{}/submissions/{}'
-	domain_url = 'https://www.hackerrank.com/domains/{}/{}'
-	problem_url = 'https://www.hackerrank.com/challenges/{}/problem'
+	base_url = 'https://www.hackerrank.com/'
+	login_url = base_url + 'auth/login'
+	submissions_url = base_url + 'rest/contests/master/submissions/?offset={}&limit={}'
+	challenge_url = base_url + 'rest/contests/master/challenges/{}/submissions/{}'
+	domain_url = base_url + 'domains/{}/{}'
+	problem_url = base_url + 'challenges/{}/problem'
 
 	new_readme_text = '## [{}]({})\n\nProblem Name|Problem Link|Solution Link\n---|---|---'
 	problem_readme_text = '{}|[Problem]({})|[Solution](/{}{})'
+
+	base_folder_name = 'Hackerrank'
+	readme_file_path = base_folder_name + '/{}/readme.md' 
 
 	# add other exclusive extensions if your data not crawled properly
 	special_extensions = {
@@ -45,10 +48,10 @@ class Crawler():
 		with open(file_name, 'w') as text_file:
 			print(code, file=text_file)
 
-	def update_readme(self, challenge_name, readme_file_name, challenge_slug, file_name, file_extension):
+	def update_readme(self, challenge_name, readme_file_path, challenge_slug, file_name, file_extension):
 		problem_url = self.problem_url.format(challenge_slug)
 		text = self.problem_readme_text.format(challenge_name, problem_url, file_name, file_extension)
-		with open(readme_file_name, 'a') as text_file:
+		with open(readme_file_path, 'a') as text_file:
 			print(text, file=text_file)
 
 	def create_readme(self, track_name, track_url, file_name):
@@ -63,14 +66,14 @@ class Crawler():
 		
 		for submission in submissions:
 			id = submission['id']
-			challenge_id = submission['challenge_id']
-			contest_id = submission['contest_id']
-			hacker_id = submission['hacker_id']
+			# challenge_id = submission['challenge_id']
+			# contest_id = submission['contest_id']
+			# hacker_id = submission['hacker_id']
 			status = submission['status']
-			created_at = submission['created_at']
+			# created_at = submission['created_at']
 			language = submission['language']
 			status_code = submission['status_code']
-			score = submission['score']
+			# score = submission['score']
 			challenge = submission['challenge']
 			challenge_name = challenge['name']
 			challenge_slug = challenge['slug']
@@ -91,7 +94,7 @@ class Crawler():
 				if track:
 					track_folder_name = track['name'].strip().replace(' ', '')
 					parent_folder_name = track['track_name'].strip().replace(' ', '')
-					folder_name = parent_folder_name + '/' + track_folder_name + '/'
+					folder_name = parent_folder_name + '/' + track_folder_name
 				
 				if language in self.special_extensions:
 					file_extension = '.' + self.special_extensions[language]
@@ -99,17 +102,17 @@ class Crawler():
 				if file_extension == '.java':
 					file_name = challenge_name.replace(' ','')
 				
-				file_path = 'Hackerrank/' + folder_name + file_name + file_extension
-				if not os.path.exists(file_name):
+				file_path = self.base_folder_name + '/' + folder_name + '/' + file_name + file_extension
+				if not os.path.exists(file_path):
 					self.store_submission(file_path, code)
-					readme_file_name = 'Hackerrank/' + folder_name + 'readme.md'
-					if not os.path.exists(readme_file_name) and track_folder_name:
+					readme_file_path = self.readme_file_path.format(folder_name)
+					if not os.path.exists(readme_file_path) and track_folder_name:
 						track_url = self.domain_url.format(track['track_slug'], track['slug'])
-						self.create_readme(track_folder_name, track_url, readme_file_name)
+						self.create_readme(track_folder_name, track_url, readme_file_path)
 					if track_folder_name:
 						self.update_readme(
 							challenge_name,
-							readme_file_name,
+							readme_file_path,
 							challenge_slug,
 							file_name,
 							file_extension,
