@@ -14,7 +14,6 @@ class Crawler():
 	problem_readme_text = '{}|[Problem]({})|[Solution](/{}{})'
 
 	base_folder_name = 'Hackerrank'
-	readme_file_path = base_folder_name + '/{}/readme.md' 
 
 	# add other exclusive extensions if your data not crawled properly
 	special_extensions = {
@@ -23,8 +22,10 @@ class Crawler():
 		'java8': 'java',
 		'mysql': 'sql',
 		'oracle': 'sql',
+		'perl': 'pl',
 		'python': 'py',
 		'python3': 'py',
+		'rust': 'rs',
 		'text': 'txt',
 	}
 
@@ -60,6 +61,12 @@ class Crawler():
 			text = self.new_readme_text.format(track_name, track_url)
 			with open(file_name, 'w') as text_file:
 				print(text, file=text_file)
+
+	def get_file_path(self, folder_name, file_name_with_extension):
+		return os.path.join(self.base_folder_name, folder_name, file_name_with_extension)
+
+	def get_readme_path(self, folder_name):
+		return os.path.join(self.base_folder_name, folder_name, 'README.md')
 				
 	def get_submissions(self, submissions):
 		headers = self.headers
@@ -85,14 +92,15 @@ class Crawler():
 				code = data['code'].replace('\\n', '\n')
 				track = data['track']
 
-				folder_name = 'Others/'
+				folder_name = 'Others'
 				file_extension = '.' + language
 				file_name = challenge_slug
-				# FIXME: fix it for folder with no track name
-				track_folder_name = None
+				track_folder_name = 'Others'
+				track_url = ''
 
 				if track:
 					track_folder_name = track['name'].strip().replace(' ', '')
+					track_url = self.domain_url.format(track['track_slug'], track['slug'])
 					parent_folder_name = track['track_name'].strip().replace(' ', '')
 					folder_name = os.path.join(parent_folder_name ,track_folder_name)
 				
@@ -102,21 +110,19 @@ class Crawler():
 				if file_extension == '.java':
 					file_name = challenge_name.replace(' ','')
 				
-				file_path = os.path.join(self.base_folder_name, folder_name, file_name + file_extension)
+				file_path = self.get_file_path(folder_name, file_name + file_extension)
 				if not os.path.exists(file_path):
 					self.store_submission(file_path, code)
-					readme_file_path = self.readme_file_path.format(folder_name)
-					if not os.path.exists(readme_file_path) and track_folder_name:
-						track_url = self.domain_url.format(track['track_slug'], track['slug'])
+					readme_file_path = self.get_readme_path(folder_name)
+					if not os.path.exists(readme_file_path):
 						self.create_readme(track_folder_name, track_url, readme_file_path)
-					if track_folder_name:
-						self.update_readme(
-							challenge_name,
-							readme_file_path,
-							challenge_slug,
-							file_name,
-							file_extension,
-						)
+					self.update_readme(
+						challenge_name,
+						readme_file_path,
+						challenge_slug,
+						file_name,
+						file_extension,
+					)
 		print('All Solutions Crawled')
 
 if __name__ == "__main__":
