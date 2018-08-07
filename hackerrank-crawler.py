@@ -94,7 +94,7 @@ class Crawler():
 				if track:
 					track_folder_name = track['name'].strip().replace(' ', '')
 					parent_folder_name = track['track_name'].strip().replace(' ', '')
-					folder_name = parent_folder_name + '/' + track_folder_name
+					folder_name = os.path.join(parent_folder_name ,track_folder_name)
 				
 				if language in self.special_extensions:
 					file_extension = '.' + self.special_extensions[language]
@@ -102,9 +102,9 @@ class Crawler():
 				if file_extension == '.java':
 					file_name = challenge_name.replace(' ','')
 				
-				file_path = self.base_folder_name + '/' + folder_name + '/' + file_name + file_extension
+				file_path = os.path.join(self.base_folder_name, folder_name, file_name + file_extension)
 				if not os.path.exists(file_path):
-					self.store_submission(file_path, code)				
+					self.store_submission(file_path, code)
 					readme_file_path = self.readme_file_path.format(folder_name)
 					if not os.path.exists(readme_file_path) and track_folder_name:
 						track_url = self.domain_url.format(track['track_slug'], track['slug'])
