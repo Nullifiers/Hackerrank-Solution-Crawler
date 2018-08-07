@@ -104,7 +104,7 @@ class Crawler():
 				
 				file_path = self.base_folder_name + '/' + folder_name + '/' + file_name + file_extension
 				if not os.path.exists(file_path):
-					self.store_submission(file_path, code)
+					self.store_submission(file_path, code)				
 					readme_file_path = self.readme_file_path.format(folder_name)
 					if not os.path.exists(readme_file_path) and track_folder_name:
 						track_url = self.domain_url.format(track['track_slug'], track['slug'])
