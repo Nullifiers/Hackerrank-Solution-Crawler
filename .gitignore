@@ -4,3 +4,4 @@ Hackerrank/
 __pycache__
 dist/
 build/
+*.egg-info/
