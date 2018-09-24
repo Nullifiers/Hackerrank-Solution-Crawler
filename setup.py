@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup (
-	name='hackerrank-crawler',
-	version='1.0.1',
+	name='hsc',
+	version='1.0.0',
 	author='Nullifiers',
 	author_email='nullifiersorg@gmail.com',
 	description='Hackerrank Solution Crawler',
@@ -21,7 +21,7 @@ setup (
     ],
 	entry_points={
 		'console_scripts': [
-			'hackerrank-crawler=hackerrank-crawler.crawler:main',
+			'hackerrank-crawler=hsc.crawler:main',
 		],
 	}
 )
