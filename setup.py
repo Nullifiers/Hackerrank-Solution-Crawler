@@ -21,7 +21,7 @@ setup (
     ],
 	entry_points={
 		'console_scripts': [
-			'hackerrank-crawler=hsc.crawler:main',
+			'hsc=hsc.crawler:main',
 		],
 	}
 )
