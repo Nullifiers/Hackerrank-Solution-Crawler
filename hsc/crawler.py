@@ -125,7 +125,7 @@ class Crawler():
 					)
 		print('All Solutions Crawled')
 
-if __name__ == "__main__":
+def main():
 	offset = 0
 	limit  = 10 # you should change this
 
@@ -142,3 +142,5 @@ if __name__ == "__main__":
 	data = resp.json()
 	models = data['models']
 	crawler.get_submissions(models)
+
+if __name__ == "__main__": main()
