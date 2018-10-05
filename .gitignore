@@ -1,6 +1,7 @@
 # Editor related files
 .idea/
 .vscode/
+.DS_Store
 
 # Setuptools distribution folder.
 dist/
