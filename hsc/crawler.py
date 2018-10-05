@@ -54,6 +54,11 @@ class Crawler():
 		text = self.problem_readme_text.format(challenge_name, problem_url, file_name, file_extension)
 		with open(readme_file_path, 'a') as text_file:
 			print(text, file=text_file)
+		with open(readme_file_path, 'r') as text_file:
+			lines = text_file.readlines()
+			sortedlines = lines[:4] + sorted(lines[4:])
+		with open(readme_file_path, 'w') as text_file:
+			text_file.writelines(sortedlines)
 
 	def create_readme(self, track_name, track_url, file_name):
 		if track_name is not None:
