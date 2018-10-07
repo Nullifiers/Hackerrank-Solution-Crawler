@@ -32,7 +32,6 @@ is open to whoever wants to implement it.
 
 ### Write Documentation
 ```
-
 This module could always use more documentation, whether as part of the
 official docs, in docstrings, or other.
 ```
@@ -50,26 +49,23 @@ are proposing a feature:
 
 ## Get Started!
 ------------
-```
 Ready to contribute? Here's how to set up `Hackerrank-Solution-Crawler` for local development.
 
 1. Fork the `Hackerrank-Solution-Crawler` repo on GitHub.
 2. Clone your fork locally::
-
+```bash
     $ git clone git@github.com:Nullifiers/Hackerrank-Solution-Crawler.git
-
+```
 3. Create a branch for local development::
-
+```bash
     $ git checkout -b name-of-your-bugfix-or-feature
+```
 
-   Now you can make your changes locally.
-
-4. Commit your changes, quoting github issue in the commit message, if applicable
-   and push your branch to GitHub::
-
+4. Commit your changes, quoting github issue in the commit message, if applicable and push your branch to GitHub::
+```bash
     $ git add .
     $ git commit -m "Fix #XX - My awesome fix"
     $ git push origin name-of-your-bugfix-or-feature
+```
 
 5. Submit a pull request through the GitHub website.
-```
