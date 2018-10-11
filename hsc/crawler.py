@@ -38,6 +38,11 @@ class Crawler():
 		self.headers = resp.request.headers
 		return resp.url != self.login_url
 
+	def authenticate(self):
+		username = input('Hackerrank Username: ')
+		password = getpass.getpass('Hackerrank Password: ')
+		return self.login(username, password)
+
 	def get_all_submissions_url(self, offset, limit):
 		return self.submissions_url.format(offset, limit)
 
@@ -137,15 +142,8 @@ def main():
 
 	crawler = Crawler()
 
-	username = input('Username: ')
-	password = getpass.getpass('Password: ')
-	login = crawler.login(username, password)
-	while(not login):
+	while(not crawler.authenticate()):
 		print('Auth was unsuccessful')
-		username = input('Username: ')
-		password = getpass.getpass('Password: ')
-		login = crawler.login(username, password)
-
 
 	limit = input('Enter limit needed to crawl: ')
 	all_submissions_url = crawler.get_all_submissions_url(offset, limit)
