@@ -16,7 +16,7 @@ class Crawler():
 	base_folder_name = 'Hackerrank'
 
 	# add other exclusive extensions if your data not crawled properly
-	special_extensions = {
+	file_extensions = {
 		'cpp14': 'cpp',
 		'haskell': 'hs',
 		'java8': 'java',
@@ -78,10 +78,10 @@ class Crawler():
 
 	def get_readme_path(self, folder_name):
 		return os.path.join(self.base_folder_name, folder_name, 'README.md')
-				
+
 	def get_submissions(self, submissions):
 		headers = self.headers
-		
+
 		for submission in submissions:
 			id = submission['id']
 			# challenge_id = submission['challenge_id']
@@ -114,13 +114,13 @@ class Crawler():
 					track_url = self.domain_url.format(track['track_slug'], track['slug'])
 					parent_folder_name = track['track_name'].strip().replace(' ', '')
 					folder_name = os.path.join(parent_folder_name ,track_folder_name)
-				
-				if language in self.special_extensions:
-					file_extension = '.' + self.special_extensions[language]
+
+				if language in self.file_extensions:
+					file_extension = '.' + self.file_extensions[language]
 
 				if file_extension == '.java':
 					file_name = challenge_name.replace(' ','')
-				
+
 				file_path = self.get_file_path(folder_name, file_name + file_extension)
 				if not os.path.exists(file_path):
 					self.store_submission(file_path, code)
@@ -147,7 +147,7 @@ def main():
 
 	limit = input('Enter limit needed to crawl: ')
 	all_submissions_url = crawler.get_all_submissions_url(offset, limit)
-	
+
 	resp = crawler.session.get(all_submissions_url, headers=crawler.headers)
 	data = resp.json()
 	models = data['models']
