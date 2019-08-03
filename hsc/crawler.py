@@ -88,7 +88,6 @@ class Crawler():
 		return self.challenge_url.format(challenge_slug, submission_id)
 
 	def store_submission(self, file_name, code):
-		print(file_name)
 		os.makedirs(os.path.dirname(file_name), exist_ok=True)
 		with open(file_name, 'w') as text_file:
 			text_file.write(code)
