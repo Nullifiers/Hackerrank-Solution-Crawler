@@ -10,8 +10,8 @@ class Crawler():
 	domain_url = base_url + 'domains/{}/{}'
 	problem_url = base_url + 'challenges/{}/problem'
 
-	new_readme_text = '## [{}]({})\n\nProblem Name|Problem Link|Solution Link\n---|---|---'
-	problem_readme_text = '{}|[Problem]({})|[Solution](./{}{})'
+	new_readme_text = '## [{}]({})\n\n|Problem Name|Problem Link|Solution Link|\n|---|---|---|\n'
+	problem_readme_text = '|{}|[Problem]({})|[Solution](./{}{})|\n'
 
 	base_folder_name = 'Hackerrank'
 
