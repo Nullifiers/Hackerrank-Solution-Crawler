@@ -96,12 +96,11 @@ class Crawler():
 	def update_readme(self, challenge_name, readme_file_path, challenge_slug, file_name, file_extension):
 		problem_url = self.problem_url.format(challenge_slug)
 		text = self.problem_readme_text.format(challenge_name, problem_url, file_name, file_extension)
-		with open(readme_file_path, 'a') as text_file:
-			text_file.write(text)
-		with open(readme_file_path, 'r') as text_file:
+		with open(readme_file_path, 'r+') as text_file:
 			lines = text_file.readlines()
+			lines.append(text)
 			sortedlines = lines[:4] + sorted(lines[4:])
-		with open(readme_file_path, 'w') as text_file:
+			text_file.seek(0)
 			text_file.writelines(sortedlines)
 
 	def create_readme(self, track_name, track_url, file_name):
