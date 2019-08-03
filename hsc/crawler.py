@@ -87,13 +87,13 @@ class Crawler():
 		print(file_name)
 		os.makedirs(os.path.dirname(file_name), exist_ok=True)
 		with open(file_name, 'w') as text_file:
-			print(code, file=text_file)
+			text_file.write(code)
 
 	def update_readme(self, challenge_name, readme_file_path, challenge_slug, file_name, file_extension):
 		problem_url = self.problem_url.format(challenge_slug)
 		text = self.problem_readme_text.format(challenge_name, problem_url, file_name, file_extension)
 		with open(readme_file_path, 'a') as text_file:
-			print(text, file=text_file)
+			text_file.write(text)
 		with open(readme_file_path, 'r') as text_file:
 			lines = text_file.readlines()
 			sortedlines = lines[:4] + sorted(lines[4:])
@@ -105,7 +105,7 @@ class Crawler():
 			os.makedirs(os.path.dirname(file_name), exist_ok=True)
 			text = self.new_readme_text.format(track_name, track_url)
 			with open(file_name, 'w') as text_file:
-				print(text, file=text_file)
+				text_file.write(text)
 
 	def get_file_path(self, folder_name, file_name_with_extension):
 		return os.path.join(self.base_folder_name, folder_name, file_name_with_extension)
