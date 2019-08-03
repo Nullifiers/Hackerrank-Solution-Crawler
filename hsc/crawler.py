@@ -15,7 +15,7 @@ class Crawler():
 
 	base_folder_name = 'Hackerrank'
 
-	# add other exclusive extensions if your data not crawled properly
+	# file extensions
 	file_extensions = {
 		'ada': 'ada',
 		'bash': 'sh',
