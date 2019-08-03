@@ -14,6 +14,7 @@ class Crawler():
 	problem_readme_text = '|{}|[Problem]({})|[Solution](./{})|\n'
 
 	base_folder_name = 'Hackerrank'
+	make_language_folder = False
 
 	# file extensions
 	file_extensions = {
@@ -147,7 +148,10 @@ class Crawler():
 					track_folder_name = track['name'].strip().replace(' ', '')
 					track_url = self.domain_url.format(track['track_slug'], track['slug'])
 					parent_folder_name = track['track_name'].strip().replace(' ', '')
-					folder_name = os.path.join(parent_folder_name ,track_folder_name)
+					folder_name = os.path.join(parent_folder_name, track_folder_name)
+
+				if self.make_language_folder:
+					folder_name = os.path.join(folder_name, language)
 
 				if language in self.file_extensions:
 					file_extension = '.{}'.format(self.file_extensions[language])
