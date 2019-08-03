@@ -10,8 +10,8 @@ class Crawler():
 	domain_url = base_url + 'domains/{}/{}'
 	problem_url = base_url + 'challenges/{}/problem'
 
-	new_readme_text = '## [{}]({})\n\n|Language|Problem Name|Problem Link|Solution Link|\n|---|---|---|\n'
-	problem_readme_text = '|{}|{}|[Problem]({})|[Solution](./{})|\n'
+	new_readme_text = '## [{}]({})\n\n|Problem Name|Problem Link|Solution Link|\n|---|---|---|\n'
+	problem_readme_text = '|{}|[Problem]({})|[Solution](./{})|\n'
 
 	base_folder_name = 'Hackerrank'
 
@@ -162,7 +162,7 @@ class Crawler():
 					if not os.path.exists(readme_file_path):
 						self.create_readme(track_folder_name, track_url, readme_file_path)
 					problem_url = self.problem_url.format(challenge_slug)
-					readme_text = self.problem_readme_text.format(language, challenge_name, problem_url, file_name + file_extension)
+					readme_text = self.problem_readme_text.format(challenge_name, problem_url, file_name + file_extension)
 					self.update_readme(
 						readme_file_path,
 						readme_text,
