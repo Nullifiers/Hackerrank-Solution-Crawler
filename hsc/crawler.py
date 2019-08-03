@@ -150,7 +150,7 @@ class Crawler():
 					folder_name = os.path.join(parent_folder_name ,track_folder_name)
 
 				if language in self.file_extensions:
-					file_extension = '.{}.{}'.format(language, self.file_extensions[language])
+					file_extension += '.{}'.format(self.file_extensions[language])
 
 				if file_extension == '.java':
 					file_name = challenge_name.replace(' ','')
