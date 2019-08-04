@@ -141,7 +141,7 @@ class Crawler():
 			if status == 'Accepted' or status_code == 2:
 				resp = self.session.get(submission_url, headers=headers)
 				data = resp.json()['model']
-				code = data['code'].replace('\\n', '\n')
+				code = data['code']
 				track = data['track']
 
 				folder_name = 'Others'
