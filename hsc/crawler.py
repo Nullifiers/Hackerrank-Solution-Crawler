@@ -11,6 +11,7 @@ class Crawler():
 	problem_url = base_url + 'challenges/{}/problem'
 
 	new_readme_text = '## [{}]({})\n\n|Problem Name|Problem Link|Solution Link|\n|---|---|---|\n'
+	readme_headers_len = len(new_readme_text.split('\n'))
 	problem_readme_text = '|{}|[Problem]({})|[Solution](./{})|\n'
 
 	base_folder_name = 'Hackerrank'
@@ -94,10 +95,11 @@ class Crawler():
 			text_file.write(code)
 
 	def update_readme(self, readme_file_path, problem_readme_text):
+		h = self.readme_headers_len
 		with open(readme_file_path, 'r+') as text_file:
 			lines = text_file.readlines()
 			lines.append(problem_readme_text)
-			sortedlines = lines[:4] + sorted(lines[4:])
+			sortedlines = lines[:h] + sorted(lines[h:])
 			text_file.seek(0)
 			text_file.writelines(sortedlines)
 
