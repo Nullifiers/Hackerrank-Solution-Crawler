@@ -15,7 +15,11 @@ class Crawler():
 	problem_readme_text = '|{}|[Problem]({})|[Solution](./{})|\n'
 
 	base_folder_name = 'Hackerrank'
+
+	# make a separate folder for different languages e.g Hackerrank/Regex/Introduction/python3/matching.py
 	make_language_folder = False
+	# prepend language in file extension e.g Hackerrank/Regex/Introduction/matching.python3.py
+	prepend_language_in_extension = False
 
 	# file extensions
 	file_extensions = {
@@ -156,9 +160,11 @@ class Crawler():
 					folder_name = os.path.join(folder_name, language)
 
 				if language in self.file_extensions:
-					file_extension = '.{}'.format(self.file_extensions[language])
+					if not self.prepend_language_in_extension:
+						file_extension = ''
+					file_extension += '.{}'.format(self.file_extensions[language])
 
-				if file_extension == '.java':
+				if file_extension.endswith('.java'):
 					file_name = challenge_name.replace(' ','')
 
 				file_path = self.get_file_path(folder_name, file_name + file_extension)
