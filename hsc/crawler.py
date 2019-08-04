@@ -95,11 +95,11 @@ class Crawler():
 			text_file.write(code)
 
 	def update_readme(self, readme_file_path, problem_readme_text):
-		h = self.readme_headers_len
+		header_length = self.readme_headers_len
 		with open(readme_file_path, 'r+') as text_file:
 			lines = text_file.readlines()
 			lines.append(problem_readme_text)
-			sortedlines = lines[:h] + sorted(lines[h:])
+			sortedlines = lines[:header_length] + sorted(lines[header_length:])
 			text_file.seek(0)
 			text_file.writelines(sortedlines)
 
