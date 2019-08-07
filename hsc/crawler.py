@@ -81,7 +81,7 @@ class Crawler():
 		self.cookies = self.session.cookies.get_dict()
 		self.headers = resp.request.headers
 		self.get_number_of_submissions()
-		return self.total_number_of_submissions != 0
+		return self.total_submissions != 0
 
 	def authenticate(self):
 		username = input('Hackerrank Username: ')
@@ -89,9 +89,11 @@ class Crawler():
 		return self.login(username, password)
 
 	def get_number_of_submissions(self):
-		all_submissions_url = self.get_all_submissions_url(0, 0)
-		resp = self.session.get(all_submissions_url, headers=self.headers)
-		self.total_number_of_submissions = resp.json()['total']
+		if not self.total_submissions:
+			all_submissions_url = self.get_all_submissions_url(0, 0)
+			resp = self.session.get(all_submissions_url, headers=self.headers)
+			self.total_submissions = resp.json()['total']
+		return self.total_submissions
 
 	def get_all_submissions_url(self, offset, limit):
 		return self.submissions_url.format(offset, limit)
