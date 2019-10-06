@@ -1,7 +1,8 @@
 import os
 import requests
 import getpass
-from hsc.helper import update_progress
+
+from hsc import helper
 
 
 class Crawler:
@@ -195,7 +196,7 @@ class Crawler:
                         readme_text,
                     )
             if self.update_progress:
-                update_progress(submission_count, total_submissions, challenge_name)
+                helper.update_progress(submission_count, total_submissions, challenge_name)
             submission_count += 1
         print('All Solutions Crawled')
 
@@ -218,5 +219,5 @@ def main():
     crawler.get_submissions(models)
 
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     main()

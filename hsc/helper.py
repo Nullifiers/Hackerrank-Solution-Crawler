@@ -1,5 +1,7 @@
 import sys
-from hsc.color import Color
+from hsc import color
+
+Color = color.Color
 
 
 def update_progress(index, total, challenge_name):
