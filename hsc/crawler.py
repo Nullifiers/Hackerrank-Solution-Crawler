@@ -1,4 +1,5 @@
 import os
+import json
 import requests
 import getpass
 from progress.bar import ChargingBar
@@ -7,6 +8,27 @@ from progress.bar import ChargingBar
 class CustomProgress(ChargingBar):
 	message = 'Downloading Solutions'
 	suffix = '%(percent)d%% [%(index)d/%(max)d]'
+
+
+class Metadata:
+
+	METADATA_FILE_NAME = 'metadata.json'
+
+	def __init__(self):
+		self.metadata = {}
+		if (os.path.isfile(self.METADATA_FILE_NAME)):
+			self.metadata = json.load(open(self.METADATA_FILE_NAME))
+
+	def put(self, challenge_id, submission_id):
+		self.metadata[str(challenge_id)] = str(submission_id)
+		json.dump(self.metadata, open(self.METADATA_FILE_NAME, 'w'))
+
+	def get(self, challenge_id):
+		challenge_id_string = str(challenge_id)
+		if challenge_id_string not in self.metadata:
+			self.metadata[challenge_id_string] = -1
+		submission_id_string = self.metadata[challenge_id_string]
+		return int(submission_id_string)
 
 
 class Crawler:
@@ -110,7 +132,8 @@ class Crawler:
 		return self.challenge_url.format(challenge_slug, submission_id)
 
 	def store_submission(self, file_name, code):
-		os.makedirs(os.path.dirname(file_name), exist_ok=True)
+		if not os.path.exists(file_name):
+			os.makedirs(os.path.dirname(file_name), exist_ok=True)
 		with open(file_name, 'w') as text_file:
 			text_file.write(code)
 
@@ -140,22 +163,22 @@ class Crawler:
 		headers = self.headers
 
 		progress = CustomProgress('Downloading Solutions', max=len(submissions))
+		metadata = Metadata()
+
 		for submission in submissions:
-			id = submission['id']
-			# challenge_id = submission['challenge_id']
-			# contest_id = submission['contest_id']
-			# hacker_id = submission['hacker_id']
+			submission_id = submission['id']
+			challenge_id = submission['challenge_id']
 			status = submission['status']
-			# created_at = submission['created_at']
 			language = submission['language']
 			status_code = submission['status_code']
-			# score = submission['score']
 			challenge = submission['challenge']
 			challenge_name = challenge['name']
 			challenge_slug = challenge['slug']
-			submission_url = self.get_submission_url(challenge_slug, id)
 
-			if status == 'Accepted' or status_code == 2:
+			if submission_id > metadata.get(challenge_id) and (status == 'Accepted' or status_code == 2):
+				metadata.put(challenge_id, submission_id)
+
+				submission_url = self.get_submission_url(challenge_slug, submission_id)
 				resp = self.session.get(submission_url, headers=headers)
 				data = resp.json()['model']
 				code = data['code']
@@ -185,17 +208,16 @@ class Crawler:
 					file_name = challenge_name.replace(' ','')
 
 				file_path = self.get_file_path(folder_name, file_name + file_extension)
-				if not os.path.exists(file_path):
-					self.store_submission(file_path, code)
-					readme_file_path = self.get_readme_path(folder_name)
-					if not os.path.exists(readme_file_path):
-						self.create_readme(track_folder_name, track_url, readme_file_path)
-					problem_url = self.problem_url.format(challenge_slug)
-					readme_text = self.problem_readme_text.format(challenge_name, problem_url, language, file_name + file_extension)
-					self.update_readme(
-						readme_file_path,
-						readme_text,
-					)
+				self.store_submission(file_path, code)
+				readme_file_path = self.get_readme_path(folder_name)
+				if not os.path.exists(readme_file_path):
+					self.create_readme(track_folder_name, track_url, readme_file_path)
+				problem_url = self.problem_url.format(challenge_slug)
+				readme_text = self.problem_readme_text.format(challenge_name, problem_url, language, file_name + file_extension)
+				self.update_readme(
+					readme_file_path,
+					readme_text,
+				)
 			progress.next()
 		progress.finish()
 		print('All Solutions Crawled')
