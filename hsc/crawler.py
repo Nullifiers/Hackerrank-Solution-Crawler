@@ -1,8 +1,15 @@
 import os
 import requests
 import getpass
+from progress.bar import ChargingBar
 
-class Crawler():
+
+class CustomProgress(ChargingBar):
+	message = 'Downloading Solutions'
+	suffix = '%(percent)d%% [%(index)d/%(max)d]'
+
+
+class Crawler:
 	base_url = 'https://www.hackerrank.com/'
 	login_url = base_url + 'auth/login'
 	submissions_url = base_url + 'rest/contests/master/submissions/?offset={}&limit={}'
@@ -132,6 +139,7 @@ class Crawler():
 	def get_submissions(self, submissions):
 		headers = self.headers
 
+		progress = CustomProgress('Downloading Solutions', max=len(submissions))
 		for submission in submissions:
 			id = submission['id']
 			# challenge_id = submission['challenge_id']
@@ -188,6 +196,8 @@ class Crawler():
 						readme_file_path,
 						readme_text,
 					)
+			progress.next()
+		progress.finish()
 		print('All Solutions Crawled')
 
 def main():
@@ -207,4 +217,5 @@ def main():
 	models = data['models']
 	crawler.get_submissions(models)
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+	main()
