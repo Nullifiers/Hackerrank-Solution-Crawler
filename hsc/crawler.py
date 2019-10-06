@@ -130,7 +130,8 @@ class Crawler:
 		return self.challenge_url.format(challenge_slug, submission_id)
 
 	def store_submission(self, file_name, code):
-		os.makedirs(os.path.dirname(file_name), exist_ok=True)
+		if not os.path.exists(file_name):
+			os.makedirs(os.path.dirname(file_name), exist_ok=True)
 		with open(file_name, 'w') as text_file:
 			text_file.write(code)
 
@@ -205,17 +206,16 @@ class Crawler:
 					file_name = challenge_name.replace(' ','')
 
 				file_path = self.get_file_path(folder_name, file_name + file_extension)
-				if not os.path.exists(file_path):
-					self.store_submission(file_path, code)
-					readme_file_path = self.get_readme_path(folder_name)
-					if not os.path.exists(readme_file_path):
-						self.create_readme(track_folder_name, track_url, readme_file_path)
-					problem_url = self.problem_url.format(challenge_slug)
-					readme_text = self.problem_readme_text.format(challenge_name, problem_url, language, file_name + file_extension)
-					self.update_readme(
-						readme_file_path,
-						readme_text,
-					)
+				self.store_submission(file_path, code)
+				readme_file_path = self.get_readme_path(folder_name)
+				if not os.path.exists(readme_file_path):
+					self.create_readme(track_folder_name, track_url, readme_file_path)
+				problem_url = self.problem_url.format(challenge_slug)
+				readme_text = self.problem_readme_text.format(challenge_name, problem_url, language, file_name + file_extension)
+				self.update_readme(
+					readme_file_path,
+					readme_text,
+				)
 			progress.next()
 		progress.finish()
 		print('All Solutions Crawled')
