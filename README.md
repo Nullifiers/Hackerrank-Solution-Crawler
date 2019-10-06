@@ -1,3 +1,5 @@
+[![PyPI version](https://badge.fury.io/py/hsc.svg)](https://badge.fury.io/py/hsc)
+
 # Hackerrank-Solution-Crawler
 Crawls solutions of hackerrank and stores as local files.
 
