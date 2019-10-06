@@ -1,4 +1,5 @@
 import os
+import json
 import requests
 import getpass
 from progress.bar import ChargingBar
@@ -7,6 +8,25 @@ from progress.bar import ChargingBar
 class CustomProgress(ChargingBar):
 	message = 'Downloading Solutions'
 	suffix = '%(percent)d%% [%(index)d/%(max)d]'
+
+
+class Metadata:
+
+	def __init__(self):
+		self.metadata = {}
+		if (os.path.isfile('metadata.txt')):
+			self.metadata = json.load(open('metadata.txt'))
+
+	def put(self, challenge_id, submission_id):
+		self.metadata[str(challenge_id)] = str(submission_id)
+		json.dump(self.metadata, open('metadata.txt', 'w'))
+
+	def get(self, challenge_id):
+		challenge_id_string = str(challenge_id)
+		if challenge_id_string not in self.metadata:
+			self.metadata[challenge_id_string] = -1
+		submission_id_string = self.metadata[challenge_id_string]
+		return int(submission_id_string)
 
 
 class Crawler:
@@ -140,22 +160,22 @@ class Crawler:
 		headers = self.headers
 
 		progress = CustomProgress('Downloading Solutions', max=len(submissions))
+		metadata = Metadata()
+
 		for submission in submissions:
-			id = submission['id']
-			# challenge_id = submission['challenge_id']
-			# contest_id = submission['contest_id']
-			# hacker_id = submission['hacker_id']
+			submission_id = submission['id']
+			challenge_id = submission['challenge_id']
 			status = submission['status']
-			# created_at = submission['created_at']
 			language = submission['language']
 			status_code = submission['status_code']
-			# score = submission['score']
 			challenge = submission['challenge']
 			challenge_name = challenge['name']
 			challenge_slug = challenge['slug']
-			submission_url = self.get_submission_url(challenge_slug, id)
 
-			if status == 'Accepted' or status_code == 2:
+			if submission_id > metadata.get(challenge_id) and (status == 'Accepted' or status_code == 2):
+				metadata.put(challenge_id, submission_id)
+
+				submission_url = self.get_submission_url(challenge_slug, submission_id)
 				resp = self.session.get(submission_url, headers=headers)
 				data = resp.json()['model']
 				code = data['code']
