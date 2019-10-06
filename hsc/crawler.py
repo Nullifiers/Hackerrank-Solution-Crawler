@@ -12,14 +12,16 @@ class CustomProgress(ChargingBar):
 
 class Metadata:
 
+	METADATA_FILE_NAME = 'metadata.json'
+
 	def __init__(self):
 		self.metadata = {}
-		if (os.path.isfile('metadata.txt')):
-			self.metadata = json.load(open('metadata.txt'))
+		if (os.path.isfile(self.METADATA_FILE_NAME)):
+			self.metadata = json.load(open(self.METADATA_FILE_NAME))
 
 	def put(self, challenge_id, submission_id):
 		self.metadata[str(challenge_id)] = str(submission_id)
-		json.dump(self.metadata, open('metadata.txt', 'w'))
+		json.dump(self.metadata, open(self.METADATA_FILE_NAME, 'w'))
 
 	def get(self, challenge_id):
 		challenge_id_string = str(challenge_id)
