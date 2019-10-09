@@ -2,6 +2,7 @@ import os
 import json
 import requests
 import getpass
+import configargparse
 from progress.bar import ChargingBar
 
 
@@ -105,6 +106,7 @@ class Crawler:
 	def __init__(self):
 		self.session = requests.Session()
 		self.total_submissions = 0
+		self.options = {}
 
 	def login(self, username, password):
 		resp = self.session.get(self.login_url, auth=(username, password))
@@ -113,9 +115,18 @@ class Crawler:
 		self.get_number_of_submissions()
 		return self.total_submissions != 0
 
+	def parse_script(self):
+		p = configargparse.ArgParser(default_config_files=['./user.yaml'])
+		p.add('-c', '--config', is_config_file=True, help='config file path')
+		p.add('-l', '--limit', help='limit to no. of solutions to be crawled')
+		p.add('-u', '--username', help='username')
+		p.add('-p', '--password', help='password')
+
+		self.options = p.parse_args()
+
 	def authenticate(self):
-		username = input('Hackerrank Username: ')
-		password = getpass.getpass('Hackerrank Password: ')
+		username = self.options.username or input('Hackerrank Username: ')
+		password = self.options.password or getpass.getpass('Hackerrank Password: ')
 		return self.login(username, password)
 
 	def get_number_of_submissions(self):
@@ -224,14 +235,14 @@ class Crawler:
 
 def main():
 	offset = 0
-	limit  = 10 # you should change this
 
 	crawler = Crawler()
-
+	crawler.parse_script()
 	while(not crawler.authenticate()):
 		print('Auth was unsuccessful')
 
-	limit = input('Enter limit needed to crawl: ')
+	limit = crawler.options.limit or crawler.get_number_of_submissions()
+	print('Start crawling {} solutions.....'.format(limit))
 	all_submissions_url = crawler.get_all_submissions_url(offset, limit)
 
 	resp = crawler.session.get(all_submissions_url, headers=crawler.headers)

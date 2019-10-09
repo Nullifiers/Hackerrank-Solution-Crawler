@@ -24,5 +24,5 @@ setup(
             'hsc=hsc.crawler:main',
         ],
     },
-    install_requires=['progress', 'requests']
+    install_requires=['progress', 'requests', 'configargparse']
 )
