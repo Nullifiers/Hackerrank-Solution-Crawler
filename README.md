@@ -16,6 +16,7 @@ Script `hsc` supports following options
 - username: -u or --username -> username of hackerrank profile
 - password: -p or --password -> password of hackerrank profile
 - limit:    -l or --limit    -> no. of solutions to be downloaded
+- offset:   -o or --offset   -> crawl solutions starting from this number
 - config:   -c or --config   -> path of config file
 
 Usage:
