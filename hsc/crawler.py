@@ -41,7 +41,7 @@ class Crawler:
 	problem_url = base_url + 'challenges/{}/problem'
 
 	new_readme_text = '## [{}]({})\n\n|Problem Name|Problem Link|Language|Solution Link|\n---|---|---|---\n'
-	readme_headers_len = len(new_readme_text.split('\n'))
+	readme_headers_len = len(new_readme_text.split('\n')) - 1
 	problem_readme_text = '|{}|[Problem]({})|{}|[Solution](./{})|\n'
 
 	base_folder_name = 'Hackerrank'
