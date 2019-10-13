@@ -238,8 +238,9 @@ def main():
 
 	crawler = Crawler()
 	crawler.parse_script()
-	while(not crawler.authenticate()):
-		print('Auth was unsuccessful')
+	if not crawler.authenticate():
+		print('Auth was unsuccessful. Exiting the program')
+		exit(1)
 
 	limit = crawler.options.limit or crawler.total_submissions
 	offset = crawler.options.offset or 0
