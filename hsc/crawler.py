@@ -119,8 +119,9 @@ class Crawler:
 		p = configargparse.ArgParser(default_config_files=['./user.yaml'])
 		p.add('-c', '--config', is_config_file=True, help='config file path')
 		p.add('-l', '--limit', help='limit to no. of solutions to be crawled')
-		p.add('-u', '--username', help='username')
-		p.add('-p', '--password', help='password')
+		p.add('-o', '--offset', help='crawl solutions starting from this number')
+		p.add('-u', '--username', help='hackerrank account username')
+		p.add('-p', '--password', help='hackerrank account password')
 
 		self.options = p.parse_args()
 
@@ -234,15 +235,15 @@ class Crawler:
 		print('All Solutions Crawled')
 
 def main():
-	offset = 0
 
 	crawler = Crawler()
 	crawler.parse_script()
 	while(not crawler.authenticate()):
 		print('Auth was unsuccessful')
 
-	limit = crawler.options.limit or crawler.get_number_of_submissions()
-	print('Start crawling {} solutions.....'.format(limit))
+	limit = crawler.options.limit or crawler.total_submissions
+	offset = crawler.options.offset or 0
+	print('Start crawling {} solutions starting from {}'.format(limit, offset))
 	all_submissions_url = crawler.get_all_submissions_url(offset, limit)
 
 	resp = crawler.session.get(all_submissions_url, headers=crawler.headers)
