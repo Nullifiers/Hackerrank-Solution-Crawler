@@ -1,4 +1,5 @@
-[![PyPI version](https://badge.fury.io/py/hsc.svg)](https://badge.fury.io/py/hsc)
+![PyPI](https://img.shields.io/pypi/v/hsc)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/hsc)
 
 # Hackerrank-Solution-Crawler
 Crawls solutions of hackerrank and stores as local files.
