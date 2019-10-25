@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/Nullifiers/Hackerrank-Solution-Crawler.svg?branch=master)](https://travis-ci.com/Nullifiers/Hackerrank-Solution-Crawler)
 ![PyPI](https://img.shields.io/pypi/v/hsc)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/hsc)
 
