@@ -1,35 +1,10 @@
 import os
-import json
 import requests
 import getpass
 import configargparse
-from progress.bar import ChargingBar
-
-
-class CustomProgress(ChargingBar):
-	message = 'Downloading Solutions'
-	suffix = '%(percent)d%% [%(index)d/%(max)d]'
-
-
-class Metadata:
-
-	METADATA_FILE_NAME = 'metadata.json'
-
-	def __init__(self):
-		self.metadata = {}
-		if (os.path.isfile(self.METADATA_FILE_NAME)):
-			self.metadata = json.load(open(self.METADATA_FILE_NAME))
-
-	def put(self, challenge_id, submission_id):
-		self.metadata[str(challenge_id)] = str(submission_id)
-		json.dump(self.metadata, open(self.METADATA_FILE_NAME, 'w'))
-
-	def get(self, challenge_id):
-		challenge_id_string = str(challenge_id)
-		if challenge_id_string not in self.metadata:
-			self.metadata[challenge_id_string] = -1
-		submission_id_string = self.metadata[challenge_id_string]
-		return int(submission_id_string)
+from progress_bar import CustomProgress
+import constants
+from metadata import Metadata
 
 
 class Crawler:
@@ -57,57 +32,7 @@ class Crawler:
 	# prepend language in file extension e.g Hackerrank/Regex/Introduction/matching.python3.py
 	prepend_language_in_extension = False
 
-	# file extensions
-	file_extensions = {
-		'ada': 'ada',
-		'bash': 'sh',
-		'c': 'c',
-		'clojure': 'clj',
-		'coffeescript': 'coffee',
-		'cpp': 'cpp',
-		'cpp14': 'cpp',
-		'csharp': 'cs',
-		'd': 'd',
-		'db2': 'sql',
-		'elixir': 'ex',
-		'erlang': 'erl',
-		'fortran': 'for',
-		'fsharp': 'fs',
-		'go': 'go',
-		'groovy': 'groovy',
-		'haskell': 'hs',
-		'java': 'java',
-		'java8': 'java',
-		'javascript': 'js',
-		'julia': 'jl',
-		'kotlin': 'kt',
-		'lolcode': 'lol',
-		'lua': 'lua',
-		'mysql': 'sql',
-		'objectivec': 'm',
-		'ocaml': 'ml',
-		'octave': 'oct',
-		'oracle': 'sql',
-		'pascal': 'pas',
-		'perl': 'pl',
-		'php': 'php',
-		'pypy': 'py',
-		'pypy3': 'py',
-		'python': 'py',
-		'python3': 'py',
-		'racket': 'rkt',
-		'r': 'r',
-		'ruby': 'rb',
-		'rust': 'rs',
-		'sbcl': 'lisp',
-		'scala': 'scala',
-		'swift': 'swift',
-		'smalltalk': 'st',
-		'tcl': 'tcl',
-		'tsql': 'sql',
-		'visualbasic': 'vbs',
-		'whitespace': 'hs',
-	}
+	file_extensions = constants.file_extensions
 
 	def __init__(self):
 		self.session = requests.Session()
@@ -248,11 +173,9 @@ class Crawler:
 				file_extension = ''
 				file_name = challenge_slug
 
-				# TODO: Revisit this to search for some better names
 				domain_name = 'Others'
-				subdomain_name = 'Misc'
+				subdomain_name = 'Miscellaneous'
 
-				# TODO: Should these slugs be empty? What will be domain_url and subdomain_url in this case?
 				domain_slug = ''
 				subdomain_slug = ''
 
@@ -265,8 +188,8 @@ class Crawler:
 				domain_url = self.domain_url.format(domain_slug)
 				subdomain_url = self.subdomain_url.format(domain_slug, subdomain_slug)
 
-				if self.make_language_folder:
-					folder_name = os.path.join(folder_name, language)
+				# if self.make_language_folder:
+				# 	folder_name = os.path.join(folder_name, language)
 
 				if language in self.file_extensions:
 					if self.prepend_language_in_extension:
