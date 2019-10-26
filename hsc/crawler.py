@@ -2,9 +2,9 @@ import os
 import requests
 import getpass
 import configargparse
-from progress_bar import CustomProgress
-import constants
-from metadata import Metadata
+from .progress_bar import CustomProgress
+from .metadata import Metadata
+from .constants import extensions
 
 
 class Crawler:
@@ -32,7 +32,7 @@ class Crawler:
 	# prepend language in file extension e.g Hackerrank/Regex/Introduction/matching.python3.py
 	prepend_language_in_extension = False
 
-	file_extensions = constants.file_extensions
+	file_extensions = extensions
 
 	def __init__(self):
 		self.session = requests.Session()

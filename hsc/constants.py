@@ -1,4 +1,4 @@
-file_extensions = {
+extensions = {
 	'ada': 'ada',
 	'bash': 'sh',
 	'c': 'c',
