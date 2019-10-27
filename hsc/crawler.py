@@ -95,7 +95,8 @@ class Crawler:
 			text_file.write(text)
 
 
-	def create_readmes(self, domain_name, subdomain_name, domain_url, subdomain_url, subdomain_readme_path, domain_readme_path, root_readme_path):
+	def create_readmes(self, domain_name, subdomain_name, domain_url, subdomain_url,
+				subdomain_readme_path, domain_readme_path, root_readme_path):
 		"""
 		Method to check if readme files already exist. If readme files doesn't exist, then create them and add headers.
 		"""
@@ -112,7 +113,8 @@ class Crawler:
 			self.write(root_readme_path, text)
 
 
-	def update_readmes(self, domain_name, subdomain_name, domain_url, subdomain_url, challenge_name, challenge_slug, language, file_name_with_extension):
+	def update_readmes(self, domain_name, subdomain_name, domain_url, subdomain_url,
+				challenge_name, challenge_slug, language, file_name_with_extension):
 		"""
 		Method to add a new row corresponding to a new solution in the readme files
 		"""
@@ -122,7 +124,8 @@ class Crawler:
 		domain_readme_path = os.path.join(self.base_folder_name, domain_name, 'README.md')
 		root_readme_path = os.path.join(self.base_folder_name, 'README.md')
 
-		self.create_readmes(domain_name, subdomain_name, domain_url, subdomain_url, subdomain_readme_path, domain_readme_path, root_readme_path)
+		self.create_readmes(domain_name, subdomain_name, domain_url, subdomain_url,
+				subdomain_readme_path, domain_readme_path, root_readme_path)
 
 		problem_url = self.problem_url.format(challenge_slug)
 		
@@ -204,7 +207,8 @@ class Crawler:
 					file_path = os.path.join(self.base_folder_name, domain_name, subdomain_name, language, file_name_with_extension)
 				self.store_submission(file_path, code)
 				
-				self.update_readmes(domain_name, subdomain_name, domain_url, subdomain_url, challenge_name, challenge_slug, language, file_name_with_extension)
+				self.update_readmes(domain_name, subdomain_name, domain_url, subdomain_url,
+						challenge_name, challenge_slug, language, file_name_with_extension)
 
 			progress.next()
 		progress.finish()
