@@ -7,12 +7,14 @@ class Metadata:
 
 	def __init__(self):
 		self.metadata = {}
-		if (os.path.isfile(self.METADATA_FILE_NAME)):
-			self.metadata = json.load(open(self.METADATA_FILE_NAME))
+		if os.path.isfile(self.METADATA_FILE_NAME):
+			with open(self.METADATA_FILE_NAME) as fp:
+				self.metadata = json.load(fp)
 
 	def put(self, challenge_id, submission_id):
 		self.metadata[str(challenge_id)] = str(submission_id)
-		json.dump(self.metadata, open(self.METADATA_FILE_NAME, 'w'))
+		with open(self.METADATA_FILE_NAME, 'w') as fp:
+			json.dump(self.metadata, fp)
 
 	def get(self, challenge_id):
 		challenge_id_string = str(challenge_id)

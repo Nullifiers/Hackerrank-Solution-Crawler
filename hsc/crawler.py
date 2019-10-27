@@ -117,6 +117,8 @@ class Crawler:
 		Method to add a new row corresponding to a new solution in the readme files
 		"""
 		subdomain_readme_path = os.path.join(self.base_folder_name, domain_name, subdomain_name, 'README.md')
+		if self.make_language_folder:
+			subdomain_readme_path = os.path.join(self.base_folder_name, domain_name, subdomain_name, language, 'README.md')
 		domain_readme_path = os.path.join(self.base_folder_name, domain_name, 'README.md')
 		root_readme_path = os.path.join(self.base_folder_name, 'README.md')
 
@@ -188,9 +190,6 @@ class Crawler:
 				domain_url = self.domain_url.format(domain_slug)
 				subdomain_url = self.subdomain_url.format(domain_slug, subdomain_slug)
 
-				# if self.make_language_folder:
-				# 	folder_name = os.path.join(folder_name, language)
-
 				if language in self.file_extensions:
 					if self.prepend_language_in_extension:
 						file_extension += '.{}'.format(language)
@@ -201,6 +200,8 @@ class Crawler:
 
 				file_name_with_extension = file_name + file_extension
 				file_path = os.path.join(self.base_folder_name, domain_name, subdomain_name, file_name_with_extension)
+				if self.make_language_folder:
+					file_path = os.path.join(self.base_folder_name, domain_name, subdomain_name, language, file_name_with_extension)
 				self.store_submission(file_path, code)
 				
 				self.update_readmes(domain_name, subdomain_name, domain_url, subdomain_url, challenge_name, challenge_slug, language, file_name_with_extension)
