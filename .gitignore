@@ -16,7 +16,7 @@ __pycache__
 
 # Script results
 Hackerrank/
-metadata*
+metadata.json
 
 # Config file
 *.yaml
