@@ -2,9 +2,9 @@ import os
 import requests
 import getpass
 import configargparse
-from .progress_bar import CustomProgress
-from .metadata import Metadata
-from .constants import extensions
+from hsc.progress_bar import CustomProgress
+from hsc.metadata import Metadata
+from hsc.constants import extensions
 
 
 class Crawler:
@@ -41,11 +41,13 @@ class Crawler:
 		self.options = {}
 
 	def login(self, username, password):
-		resp = self.session.get(self.login_url, auth=(username, password), headers={'user-agent': self.user_agent})
-		self.cookies = self.session.cookies.get_dict()
-		self.headers = resp.request.headers
-		self.get_number_of_submissions()
-		return self.total_submissions != 0
+		resp = self.session.post(self.login_url, auth=(username, password), headers={'user-agent': self.user_agent})
+		data = resp.json()
+		if data['status']:
+			self.cookies = self.session.cookies.get_dict()
+			self.headers = resp.request.headers
+			self.get_number_of_submissions()
+		return data['status']
 
 	def parse_script(self):
 		p = configargparse.ArgParser(default_config_files=['./user.yaml'])
