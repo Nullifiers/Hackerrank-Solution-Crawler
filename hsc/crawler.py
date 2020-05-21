@@ -9,6 +9,7 @@ from .constants import extensions
 
 class Crawler:
 	base_url = 'https://www.hackerrank.com/'
+	user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
 	login_url = base_url + 'auth/login'
 	submissions_url = base_url + 'rest/contests/master/submissions/?offset={}&limit={}'
 	challenge_url = base_url + 'rest/contests/master/challenges/{}/submissions/{}'
@@ -40,7 +41,7 @@ class Crawler:
 		self.options = {}
 
 	def login(self, username, password):
-		resp = self.session.get(self.login_url, auth=(username, password))
+		resp = self.session.get(self.login_url, auth=(username, password), headers={'user-agent': self.user_agent})
 		self.cookies = self.session.cookies.get_dict()
 		self.headers = resp.request.headers
 		self.get_number_of_submissions()
