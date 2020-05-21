@@ -2,9 +2,9 @@ import os
 import requests
 import getpass
 import configargparse
-from hsc.progress_bar import CustomProgress
-from hsc.metadata import Metadata
-from hsc.constants import extensions
+from .progress_bar import CustomProgress
+from .metadata import Metadata
+from .constants import extensions
 
 
 class Crawler:
