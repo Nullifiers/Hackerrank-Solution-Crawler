@@ -9,6 +9,7 @@ from .constants import extensions
 
 class Crawler:
 	base_url = 'https://www.hackerrank.com/'
+	user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
 	login_url = base_url + 'auth/login'
 	submissions_url = base_url + 'rest/contests/master/submissions/?offset={}&limit={}'
 	challenge_url = base_url + 'rest/contests/master/challenges/{}/submissions/{}'
@@ -40,11 +41,13 @@ class Crawler:
 		self.options = {}
 
 	def login(self, username, password):
-		resp = self.session.get(self.login_url, auth=(username, password))
-		self.cookies = self.session.cookies.get_dict()
-		self.headers = resp.request.headers
-		self.get_number_of_submissions()
-		return self.total_submissions != 0
+		resp = self.session.post(self.login_url, auth=(username, password), headers={'user-agent': self.user_agent})
+		data = resp.json()
+		if data['status']:
+			self.cookies = self.session.cookies.get_dict()
+			self.headers = resp.request.headers
+			self.get_number_of_submissions()
+		return data['status']
 
 	def parse_script(self):
 		p = configargparse.ArgParser(default_config_files=['./user.yaml'])
@@ -128,7 +131,7 @@ class Crawler:
 				subdomain_readme_path, domain_readme_path, root_readme_path)
 
 		problem_url = self.problem_url.format(challenge_slug)
-		
+
 		file_path_relative_to_subdomain = './' + file_name_with_extension
 		file_path_relative_to_domain = '{}/{}'.format(subdomain_name, file_name_with_extension)
 		file_path_relative_to_root = '{}/{}/{}'.format(domain_name, subdomain_name, file_name_with_extension)
@@ -173,7 +176,7 @@ class Crawler:
 				data = resp.json()['model']
 				code = data['code']
 				track = data['track']
-				
+
 				# Default should be empty
 				file_extension = ''
 				file_name = challenge_slug
@@ -189,7 +192,7 @@ class Crawler:
 					subdomain_name = track['name'].strip().replace(' ', '')
 					domain_slug = track['track_slug']
 					subdomain_slug = track['slug']
-				
+
 				domain_url = self.domain_url.format(domain_slug)
 				subdomain_url = self.subdomain_url.format(domain_slug, subdomain_slug)
 
@@ -206,7 +209,7 @@ class Crawler:
 				if self.make_language_folder:
 					file_path = os.path.join(self.base_folder_name, domain_name, subdomain_name, language, file_name_with_extension)
 				self.store_submission(file_path, code)
-				
+
 				self.update_readmes(domain_name, subdomain_name, domain_url, subdomain_url,
 						challenge_name, challenge_slug, language, file_name_with_extension)
 

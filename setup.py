@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='hsc',
-    version='1.2.1',
+    version='1.2.2',
     author='Nullifiers',
     author_email='nullifiersorg@gmail.com',
     description='Hackerrank Solution Crawler',
@@ -21,7 +21,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'hsc=hsc.crawler:main',
+            'hsc=hsc.__main__:main',
         ],
     },
     install_requires=['progress', 'requests', 'configargparse']
