@@ -19,5 +19,10 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    entry_points={
+        'console_scripts': [
+            'hsc=hsc.__main__:main',
+        ],
+    },
     install_requires=['progress', 'requests', 'configargparse']
 )
