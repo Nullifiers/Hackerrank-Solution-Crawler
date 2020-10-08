@@ -9,7 +9,7 @@ from .constants import extensions
 
 class Crawler:
 	base_url = 'https://www.hackerrank.com/'
-	user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+	user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36 Edg/85.0.564.63'
 	login_url = base_url + 'auth/login'
 	submissions_url = base_url + 'rest/contests/master/submissions/?offset={}&limit={}'
 	challenge_url = base_url + 'rest/contests/master/challenges/{}/submissions/{}'
