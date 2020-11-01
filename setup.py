@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='hsc',
-    version='1.2.3',
+    version='1.2.3-beta',
     author='Nullifiers',
     author_email='nullifiersorg@gmail.com',
     description='Hackerrank Solution Crawler',
