@@ -42,12 +42,21 @@ class Crawler:
 
 	def login(self, username, password):
 		resp = self.session.post(self.login_url, auth=(username, password), headers={'user-agent': self.user_agent})
-		data = resp.json()
-		if data['status']:
-			self.cookies = self.session.cookies.get_dict()
-			self.headers = resp.request.headers
-			self.get_number_of_submissions()
-		return data['status']
+
+		try:
+			data = resp.json()
+		except:
+			print ("Exception occurred while converting response to JSON format")
+			return False
+
+		if !data['status']:
+			print(data['errors'])
+			return False
+
+		self.cookies = self.session.cookies.get_dict()
+		self.headers = resp.request.headers
+		self.get_number_of_submissions()
+		return True
 
 	def parse_script(self):
 		p = configargparse.ArgParser(default_config_files=['./user.yaml'])
