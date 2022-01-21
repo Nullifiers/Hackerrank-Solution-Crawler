@@ -1,6 +1,10 @@
-[![Build Status](https://travis-ci.com/Nullifiers/Hackerrank-Solution-Crawler.svg?branch=master)](https://travis-ci.com/Nullifiers/Hackerrank-Solution-Crawler)
-![PyPI](https://img.shields.io/pypi/v/hsc)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/hsc)
+[![Build Status](https://img.shields.io/travis/com/Nullifiers/Hackerrank-Solution-Crawler?style=for-the-badge)](https://travis-ci.com/Nullifiers/Hackerrank-Solution-Crawler)
+![PyPI](https://img.shields.io/pypi/v/hsc?style=for-the-badge)
+<!-- ![PyPI - Downloads](https://img.shields.io/pypi/dm/hsc) -->
+![Last commit](https://img.shields.io/github/last-commit/Nullifiers/Hackerrank-Solution-Crawler?style=for-the-badge)
+![Latest tag](https://img.shields.io/github/v/tag/Nullifiers/Hackerrank-Solution-Crawler?style=for-the-badge)
+![Forks](https://img.shields.io/github/forks/Nullifiers/Hackerrank-Solution-Crawler?style=for-the-badge)
+![Stars](https://img.shields.io/github/stars/Nullifiers/Hackerrank-Solution-Crawler?style=for-the-badge)
 
 # Hackerrank-Solution-Crawler
 Crawls solutions of hackerrank and stores as local files.
