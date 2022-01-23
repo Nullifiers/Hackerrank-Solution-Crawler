@@ -10,7 +10,7 @@ from .constants import extensions
 class Crawler:
 	base_url = 'https://www.hackerrank.com/'
 	user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36 Edg/85.0.564.63'
-	login_url = base_url + 'auth/login'
+	login_url = base_url + 'rest/auth/login'
 	submissions_url = base_url + 'rest/contests/master/submissions/?offset={}&limit={}'
 	challenge_url = base_url + 'rest/contests/master/challenges/{}/submissions/{}'
 	domain_url = base_url + 'domains/{}'
@@ -234,6 +234,7 @@ def main():
 	data = resp.json()
 	models = data['models']
 	crawler.get_submissions(models)
+
 
 if __name__ == "__main__":
 	main()
